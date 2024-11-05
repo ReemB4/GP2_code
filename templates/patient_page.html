@@ -283,7 +283,6 @@
     </header>
     <ul>
       <li tabindex="0" class="icon-users"> <a style="color:white; text-decoration:none;" href="{{ url_for('home') }}"><span>Patients</span></a></li>
-      <li tabindex="0" class="icon-users"> <a style="color:white; text-decoration:none;" href=""><span>Logout</span></a></li>
     </ul>                                                                                       
   </nav>
   <main>
@@ -312,7 +311,19 @@
 
         <h4 class="mt-4">Patient {{patient_id}}</h4>
 
+        <br>
+        <form action="{{ url_for('compare_visits') }}" method="POST" style="display: inline-block;">
+          <button type="submit" name="patient_id" value="{{ patient_id }}" class="btn btn-info btn-sm">
+              Compare Visits Information
+          </button>
+      </form>
+      <form action="{{ url_for('compare_two') }}" method="POST" style="display: inline-block;">
+          <button type="submit" name="patient_id" value="{{ patient_id }}" class="btn btn-secondary btn-sm">
+              Compare Between Patients
+          </button>
+      </form>
 
+      <br><br><br>
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" id="tab_pep" onclick="change_display(1)">Peptide</a>

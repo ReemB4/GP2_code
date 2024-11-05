@@ -7,7 +7,6 @@ function SelectTag(e, t = { shadow: !1, rounded: !0 }) {
 
     var m = new DOMParser;
 
-    // Generates an option list item (li)
     function g(e, t, l = !1) {
         const n = document.createElement("li");
         n.innerHTML = "<input type='checkbox' style='margin:0 0.5em 0 0' class='input_checkbox'>";
@@ -15,185 +14,147 @@ function SelectTag(e, t = { shadow: !1, rounded: !0 }) {
         n.dataset.value = e.value;
         const a = n.firstChild;
         a.dataset.value = e.value;
-
+        if (t && e.label.toLowerCase().startsWith(t.toLowerCase())) p.appendChild(n);
+        else if (!t) p.appendChild(n);
         if (l) {
             n.style.backgroundColor = h.bgColor;
-            a.checked = true;
-        } else {
-            a.checked = false;
+            a.checked = !0;
         }
-        t ? p.appendChild(n) : p.appendChild(n);
     }
 
-    // Refreshes the list of options and keeps only the last selected one
     function f(e = null) {
-        p.innerHTML = ""; // Clear the options
-        let selectedOption = n.find(opt => opt.selected);
-        n.forEach(opt => opt.selected = false); // Deselect all
-        if (selectedOption) selectedOption.selected = true; // Keep only the last selected
-
-        for (let t of n) {
-            g(t, e, t.selected); // Render options with the correct selection state
+        p.innerHTML = "";
+        for (var t of n) {
+            if (t.selected) {
+                C(t);
+                g(t, e, !0);
+            } else {
+                g(t, e);
+            }
         }
-        if (selectedOption) C(selectedOption); // Show the last selected tag
     }
 
-    // Creates the selected tag with close button
     function C(e) {
-        // Remove all other tags before adding the new one
+        // Clear existing selected items before adding the new one
         i.innerHTML = "";
-
         const t = document.createElement("div");
         t.classList.add("item-container");
-        t.style.color = h.textColor;
-        t.style.borderColor = h.borderColor;
-        t.style.background = h.bgColor;
-
+        t.style.color = h.textColor || "#2c7a7b";
+        t.style.borderColor = h.borderColor || "#81e6d9";
+        t.style.background = h.bgColor || "#e6fffa";
         const l = document.createElement("div");
         l.classList.add("item-label");
-        l.style.color = h.textColor;
+        l.style.color = h.textColor || "#2c7a7b";
         l.innerHTML = e.label;
         l.dataset.value = e.value;
-
-        const a = m.parseFromString(`
-            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" 
-            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
-            stroke-linejoin="round" class="item-close-svg">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-        `, "image/svg+xml").documentElement;
-
-        a.addEventListener("click", () => {
-            e.selected = false; // Deselect the option
-            i.innerHTML = ""; // Clear the tag
-            f(); // Refresh the list
-            E(); // Trigger onChange
-        });
-
+        const a = m.parseFromString('<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="item-close-svg">\n                <line x1="18" y1="6" x2="6" y2="18"></line>\n                <line x1="6" y1="6" x2="18" y2="18"></line>\n            </svg>', "image/svg+xml").documentElement;
+        a.addEventListener("click", (t => {
+            n.find((t => t.value == e.value)).selected = !1;
+            f();
+            E();
+        }));
         t.appendChild(l);
         t.appendChild(a);
-        i.appendChild(t);
+        i.append(t);
     }
 
-    // Adds click listeners to options to ensure only the last one remains selected
     function L() {
-        for (let e of p.children) {
-            e.addEventListener("click", () => {
-                n.forEach(opt => opt.selected = false); // Deselect all
-                const selectedOption = n.find(t => t.value == e.dataset.value);
-                selectedOption.selected = true; // Select the clicked option
-
-                f(); // Refresh the list
-                E(); // Trigger onChange
-            });
+        for (var e of p.children) {
+            e.addEventListener("click", (e => {
+                // Deselect all other options first
+                n.forEach(item => item.selected = !1);
+                // Select the clicked item
+                const selectedOption = n.find(t => t.value == e.target.dataset.value);
+                if (selectedOption) {
+                    selectedOption.selected = !0;
+                    c.value = null;
+                    f();
+                    E();
+                }
+            }));
         }
     }
 
-    // Checks if a tag already exists (not needed now since only one is allowed)
-    function b(value) {
-        return Array.from(i.children).some(t => t.firstChild.dataset.value == value);
+    function b(e) {
+        return Array.from(i.children).some(t => !t.classList.contains("input-body") && t.firstChild.dataset.value == e);
     }
 
-    // Updates the native select and triggers onChange if needed
-    function E(trigger = true) {
-        const selectedValues = [];
-        n.forEach((option, index) => {
-            l.options[index].selected = option.selected;
-            if (option.selected) selectedValues.push({ label: option.label, value: option.value });
-        });
-
-        if (trigger && t.onChange) t.onChange(selectedValues);
+    function w(e) {
+        for (var t of i.children) {
+            if (!t.classList.contains("input-body") && t.firstChild.dataset.value == e) {
+                i.removeChild(t);
+            }
+        }
     }
 
-    // Initialize the component
+    function E(e = !0) {
+        selected_values = [];
+        for (var a = 0; a < n.length; a++) {
+            l.options[a].selected = n[a].selected;
+            if (n[a].selected) selected_values.push({ label: n[a].label, value: n[a].value });
+        }
+        if (e && t.hasOwnProperty("onChange")) t.onChange(selected_values);
+    }
+
     l = document.getElementById(e);
-    n = Array.from(l.options).map(opt => ({ value: opt.value, label: opt.label, selected: opt.selected }));
-    l.classList.add("hidden");
+    (function () {
+        n = [...l.options].map((e => ({ value: e.value, label: e.label, selected: e.selected })));
+        l.classList.add("hidden");
+        (a = document.createElement("div")).classList.add("mult-select-tag");
+        (d = document.createElement("div")).classList.add("wrapper");
+        (o = document.createElement("div")).classList.add("body");
+        if (t.shadow) o.classList.add("shadow");
+        if (t.rounded) o.classList.add("rounded");
+        (i = document.createElement("div")).classList.add("input-container");
+        (c = document.createElement("input")).classList.add("input");
+        c.placeholder = `${t.placeholder || "Search..."}`;
+        (r = document.createElement("inputBody")).classList.add("input-body");
+        r.append(c);
+        o.append(i);
+        (s = document.createElement("div")).classList.add("btn-container");
+        (u = document.createElement("button")).type = "button";
+        s.append(u);
+        const e = m.parseFromString('<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n                <polyline points="18 15 12 21 6 15"></polyline>\n            </svg>', "image/svg+xml").documentElement;
+        u.append(e);
+        o.append(s);
+        d.append(o);
+        (v = document.createElement("div")).classList.add("drawer", "hidden");
+        if (t.shadow) v.classList.add("shadow");
+        if (t.rounded) v.classList.add("rounded");
+        v.append(r);
+        p = document.createElement("ul");
+        v.appendChild(p);
+        a.appendChild(d);
+        a.appendChild(v);
+        if (l.nextSibling) l.parentNode.insertBefore(a, l.nextSibling);
+        else l.parentNode.appendChild(a);
+    })();
 
-    a = document.createElement("div");
-    a.classList.add("mult-select-tag");
+    f();
+    L();
+    E(!1);
 
-    d = document.createElement("div");
-    d.classList.add("wrapper");
-
-    o = document.createElement("div");
-    o.classList.add("body");
-    if (t.shadow) o.classList.add("shadow");
-    if (t.rounded) o.classList.add("rounded");
-
-    i = document.createElement("div");
-    i.classList.add("input-container");
-
-    c = document.createElement("input");
-    c.classList.add("input");
-    c.placeholder = t.placeholder || "Search...";
-
-    r = document.createElement("inputBody");
-    r.classList.add("input-body");
-    r.appendChild(c);
-
-    o.appendChild(i);
-
-    s = document.createElement("div");
-    s.classList.add("btn-container");
-
-    u = document.createElement("button");
-    u.type = "button";
-    s.appendChild(u);
-
-    const svg = m.parseFromString(`
-        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" 
-        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
-        stroke-linejoin="round">
-            <polyline points="18 15 12 21 6 15"></polyline>
-        </svg>
-    `, "image/svg+xml").documentElement;
-
-    u.appendChild(svg);
-    o.appendChild(s);
-    d.appendChild(o);
-
-    v = document.createElement("div");
-    v.classList.add("drawer", "hidden");
-    if (t.shadow) v.classList.add("shadow");
-    if (t.rounded) v.classList.add("rounded");
-
-    v.appendChild(r);
-
-    p = document.createElement("ul");
-    v.appendChild(p);
-
-    a.appendChild(d);
-    a.appendChild(v);
-    l.parentNode.insertBefore(a, l.nextSibling);
-
-    f(); // Initial render
-    L(); // Attach listeners
-    E(false); // Sync initial values
-
-    // Toggle dropdown visibility
-    u.addEventListener("click", () => {
-        v.classList.toggle("hidden");
-        if (!v.classList.contains("hidden")) {
+    u.addEventListener("click", (() => {
+        if (v.classList.contains("hidden")) {
             f();
             L();
+            v.classList.remove("hidden");
             c.focus();
-        }
-    });
-
-    // Search input listener
-    c.addEventListener("keyup", e => {
+        } else v.classList.add("hidden");
+    }));
+    c.addEventListener("keyup", (e => {
         f(e.target.value);
         L();
-    });
-
-    c.addEventListener("keyup",(e=>{f(e.target.value),L()})),c.addEventListener("keydown",(e=>{if("Backspace"===e.key&&!e.target.value&&i.childElementCount>1){const e=o.children[i.childElementCount-2].firstChild;
-        n.find((t=>t.value==e.dataset.value)).selected=!1,w(e.dataset.value),E()}}))
-
-    // Hide dropdown on outside click
-    window.addEventListener("click", e => {
+    }));
+    c.addEventListener("keydown", (e => {
+        if ("Backspace" === e.key && !e.target.value && i.childElementCount > 1) {
+            const e = o.children[i.childElementCount - 2].firstChild;
+            n.find((t => t.value == e.dataset.value)).selected = !1;
+            w(e.dataset.value);
+            E();
+        }
+    }));
+    window.addEventListener("click", (e => {
         if (!a.contains(e.target)) v.classList.add("hidden");
-    });
-
+    }));
 }
