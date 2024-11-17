@@ -323,43 +323,64 @@
           </button>
       </form>
 
-      <br><br><br>
+      <br><br>
+      {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{error}}
+          </div>
+        {% endif %}
+
+      <div class="form-group">
+        <h6 class="mt-4">Search for a UniProt ID to Annotate</h6>
+        <form method="GET" action="{{ url_for('protein_info') }}">
+
+            <input type="hidden" name="patient_id" value="{{patient_id}}"><!-- </a> </button>-->
+            <div class="input-group mb-3">
+                <input type="text" name="uniprot" class="form-control" placeholder="Search for UniProt ID" aria-label="Search for UniProt" aria-describedby="button-addon1" required>
+                <input class="btn btn-outline-secondary" type="submit" id="button-addon1" value="Search">
+            </div>
+
+            <br>
+            <!--<input type="submit" class="btn btn-primary btn-sm" value="Search" > </a> </button>-->
+        </form>
+    </div> 
+
+    
+
         <ul class="nav nav-tabs">
-            <li class="nav-item">
+            <li class="nav-item" style="cursor: pointer;">
                 <a class="nav-link active" aria-current="page" id="tab_pep" onclick="change_display(1)">Peptide</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" style="cursor: pointer;">
                 <a class="nav-link" id="tab_pro" onclick="change_display(2)">Protein</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" style="cursor: pointer;">
                 <a class="nav-link" id="tab_sco" onclick="change_display(3)">Score</a>
             </li>
         </ul>
 
-        <br>
-        {% if error %}
-        <div class="alert alert-primary" role="alert">
-            {{error}}
-          </div>
-        {% endif %}
+    
+        
         
         <!-- protein -->
         <div id="protein_div" style="display: none;">
 
+            
             <div class="form-group">
-                <h6 class="mt-4">Select a <span id="compare_type">Protein</span> to Annotate</h6>
-                <form method="GET", action="{{ url_for('protein_info') }}">
-
-                    <input type="hidden" name="patient_id" value="{{patient_id}}"><!-- </a> </button>-->
-                    <div class="input-group mb-3">
-                        <input type="text" name="uniprot" class="form-control" placeholder="Search for UniProt" aria-label="Search for UniProt" aria-describedby="button-addon1">
-                        <input class="btn btn-outline-secondary" type="submit" id="button-addon1" value="Search">
-                    </div>
+              <h6 class="mt-4">Select Protein to Annotate</h6>
+                 
+                <form method="POST" action="{{ url_for('protein_info') }}">
+                    <select id="uniprot_pr" name="uniprot" class="multi-select-tag" required title="Please select a protein">
+                        {% for info in pro_list %}
+                            <option value="{{ info['UniProt'] }}">{{ info['UniProt'] }}</option>
+                        {% endfor %}
+                    </select>
     
                     <br>
-                    <!--<input type="submit" class="btn btn-primary btn-sm" value="Search" > </a> </button>-->
+                    <input type="hidden" name="patient_id" value="{{patient_id}}">
+                    <input type="submit" class="btn btn-primary btn-sm" value="Select">
                 </form>
-            </div> 
+            </div>  
     
             <br>
     
@@ -367,7 +388,7 @@
                 <thead>
                     <tr>
                         <th>Visit Months</th>
-                        <th>UniProt</th>
+                        <th>UniProt ID</th>
                         <th>NPX</th>
                         <th>Action</th>
                     </tr>
@@ -400,19 +421,37 @@
         <!-- peptide -->
         <div id="peptide_div" style="display: block;">
 
-            <div class="form-group">
-                <h6 class="mt-4">Select a <span id="compare_type">Peptide</span> to Annotate</h6>
+            <!-- <div class="form-group">
+                <h6 class="mt-4">Search for a <span id="compare_type">Peptide</span> to Annotate</h6>
                 <form method="GET", action="{{ url_for('peptide_info') }}">
 
-                    <input type="hidden" name="patient_id" value="{{patient_id}}"><!-- </a> </button>-->
+                    <input type="hidden" name="patient_id" value="{{patient_id}}">#</a> </button>
 
                     <div class="input-group mb-3">
-                        <input type="text" name="uniprot" class="form-control" placeholder="Search for UniProt" aria-label="Search for UniProt or Peptide" aria-describedby="button-addon2">
+                        <input type="text" name="uniprot" class="form-control" placeholder="Search for UniProt" aria-label="Search for UniProt or Peptide" aria-describedby="button-addon2" required>
                         <input class="btn btn-outline-secondary" type="submit" id="button-addon2" value="Search">
                     </div>
     
                     <br>
-                    <!-- <input type="submit" class="btn btn-primary btn-sm" value="Search" ></a> </button>-->
+                    #<input type="submit" class="btn btn-primary btn-sm" value="Search" ></a> </button>
+                </form>
+            </div>  -->
+
+            <div class="form-group">
+              <h6 class="mt-4">Select Peptide to Annotate</h6>
+                 
+                <form method="POST" action="{{ url_for('peptide_info') }}">
+                    <select id="uniprot_pe" name="uni_pep_name" class="multi-select-tag" required title="Please select a protein"> <!-- name="uniprot" -->
+                        {% for info in pep_list %}
+                            <option value="{{ info['UniProt'] }}|{{ info['Peptide'] }}">{{ info['UniProt'] }} &#8739; {{ info['Peptide'] }}</option>
+                            <!-- <input type="hidden" name="pep_name" value="{{info['Peptide']}}"> -->
+                        {% endfor %}
+                    </select>
+    
+                    <br>
+
+                    <input type="hidden" name="patient_id" value="{{patient_id}}">
+                    <input type="submit" class="btn btn-primary btn-sm" value="Select">
                 </form>
             </div> 
     
@@ -422,7 +461,7 @@
                 <thead>
                     <tr>
                         <th>Visit Months</th>
-                        <th>UniProt</th>
+                        <th>UniProt ID</th>
                         <th>Peptide</th>
                         <th>Peptide Abundance</th>
                         <th>Action</th>
@@ -439,8 +478,8 @@
                         <td>
                             <form action="{{ url_for('peptide_info') }}" method="POST" style="display: inline-block;">
                                 <input type="hidden" name="patient_id" value="{{patient_id}}"><!-- </a> </button>-->
-                                <input type="hidden" name="pep_name" value="{{info['Peptide']}}">
-                                <button type="submit" name="uniprot" value="{{ info['UniProt'] }}" class="btn btn-primary btn-sm">
+                                <!-- <input type="hidden" name="uni_pep_name" value="{{info['Peptide']}}"> -->
+                                <button type="submit" name="uni_pep_name" value="{{ info['UniProt'] }}|{{info['Peptide']}}" class="btn btn-primary btn-sm">
                                     Annotate
                                 </button>
                             </form>
@@ -459,6 +498,38 @@
         <div id="score_div" style="display: none;">
     
             <br>
+            <!-- <h6 class="mt-4">Enter four scores to predict proteins</h6>
+            <br>
+            <form class="row g-3" >
+              
+              <br>
+              <div class="col-md-1">
+                <label for="updrs_1" class="form-label">updrs_1</label>
+                <input type="text" class="form-control" id="updrs_1" name="updrs_1">
+              </div>
+              <div class="col-md-1">
+                <label for="updrs_1" class="form-label">updrs_2</label>
+                <input type="text" class="form-control" id="updrs_2" name="updrs_2">
+              </div>
+              <div class="col-md-1">
+                <label for="updrs_3" class="form-label">updrs_3</label>
+                <input type="text" class="form-control" id="updrs_3" name="updrs_3">
+              </div>
+              <div class="col-md-1">
+                <label for="updrs_4" class="form-label">updrs_4</label>
+                <input type="text" class="form-control" id="updrs_4" name="updrs_4">
+              </div>
+              <br><br>
+              <div class="col-12">
+                
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-primary btn-sm">Predict Protein</button>
+              </div>
+            </form> -->
+
+
+            <br>
     
             <table class="table table-hover table-sm table-bordered" style=" font-size: smaller;">
                 <thead>
@@ -468,6 +539,7 @@
                         <th>UPDRS 2 Score</th>
                         <th>UPDRS 3 Score</th>
                         <th>UPDRS 4 Score</th>
+                        <!-- <th>Action</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -479,7 +551,15 @@
                         <td>{{ info['updrs_2'] }}</td>
                         <td>{{ info['updrs_3'] }}</td>
                         <td>{{ info['updrs_4'] }}</td>
-                        
+                        <!-- <td>
+                          <form action="" method="" style="display: inline-block;">
+                              <input type="hidden" name="patient_id" value="{{patient_id}}">
+                              <input type="hidden" name="pep_name" value="{{info['Peptide']}}">
+                              <button type="submit" name="uniprot" value="{{ info['UniProt'] }}" class="btn btn-primary btn-sm">
+                                  Predict Protein
+                              </button>
+                          </form>
+                      </td> -->
                     </tr>
                     {% else %}
                     <tr>
@@ -497,33 +577,24 @@
     
     <!-- content end-->
     <br><br><br><br><br><br><br>
-    <footer>
-      <p>
-        <a id="ftr" href="https://facebook.com/" class="fa fa-facebook"></a>
-        <a id="ftr" href="https://whatsapp.com/" class="fa fa-whatsapp"></a>
-        <a id="ftr" href="https://instagram.com/" class="fa fa-instagram"></a>
-        <a id="ftr" href="https://twitter.com/" class="fa fa-twitter"></a>
-     
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+<!--     <button id="downloadPDF" class="btn btn-secondary btn-sm" href="patient_page.html" onabort="window.print()">Download Patient Info as PDF</button>
+ -->
+    
   </main>
 
   <script>
     function change_display(tabIndex) {
-    // Hide all sections initially
+
     document.getElementById("peptide_div").style.display = "none";
     document.getElementById("protein_div").style.display = "none";
     document.getElementById("score_div").style.display = "none";
 
-    // Remove active class from all tab links
+
     document.getElementById("tab_pep").classList.remove("active");
     document.getElementById("tab_pro").classList.remove("active");
     document.getElementById("tab_sco").classList.remove("active");
 
-    // Show the selected tab content and set the active class for the corresponding tab
+
     switch (tabIndex) {
         case 1:
             document.getElementById("peptide_div").style.display = "block";
@@ -549,7 +620,7 @@
   <script src="/static/MultiSelect_style.js "></script>
 
 <script>
-    new SelectTag('uniprot', { // id
+    new SelectTag('uniprot_pr', { // id
     rounded: false,    // default true
     shadow: false,      // default false
     placeholder: 'Search',  // default Search...
@@ -564,6 +635,25 @@
 })
 
 </script>
+
+<script>
+  new SelectTag('uniprot_pe', { // id
+  rounded: false,    // default true
+  shadow: false,      // default false
+  placeholder: 'Search',  // default Search...
+  tagColor: {
+      textColor: '#000',
+      borderColor: '#dee2e6',
+      bgColor: '#fff',
+  },
+  onChange: function(values) {
+      console.log(values)
+  }
+})
+
+</script>
+
+
 
 </body>
 

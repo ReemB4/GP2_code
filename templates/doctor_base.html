@@ -324,7 +324,7 @@
             <form method="POST", action="{{ url_for('view_patient') }}">
                 <select id="view_patient" name="view_patient" class="multi-select-tag" required title="Please select a patient">
                     {% for patient in patients %}
-                        <option value="{{ patient['Patient ID'] }}">{{ patient['Patient ID'] }}</option>
+                        <option value="{{ patient['Patient ID'] }}">Patient {{ patient['Patient ID'] }}</option>
                     {% endfor %}
                 </select>
 
@@ -388,18 +388,7 @@
     
     <!-- content end-->
     <br><br><br><br><br><br><br>
-    <footer>
-      <p style="text-align: center;">
-        <a id="ftr" href="https://facebook.com/" class="fa fa-facebook"></a>
-        <a id="ftr" href="https://whatsapp.com/" class="fa fa-whatsapp"></a>
-        <a id="ftr" href="https://instagram.com/" class="fa fa-instagram"></a>
-        <a id="ftr" href="https://twitter.com/" class="fa fa-twitter"></a>
-     
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+    
   </main>
 
   <script src="/static/SelectTag_script.js "></script>

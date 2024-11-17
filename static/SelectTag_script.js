@@ -14,7 +14,7 @@ function SelectTag(e, t = { shadow: !1, rounded: !0 }) {
         n.dataset.value = e.value;
         const a = n.firstChild;
         a.dataset.value = e.value;
-        if (t && e.label.toLowerCase().startsWith(t.toLowerCase())) p.appendChild(n);
+        if (t && e.label.toLowerCase().includes(t.toLowerCase())) p.appendChild(n);
         else if (!t) p.appendChild(n);
         if (l) {
             n.style.backgroundColor = h.bgColor;

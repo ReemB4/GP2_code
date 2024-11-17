@@ -325,6 +325,8 @@
         
         <br>
 
+        {% if peptide_info['Entry'] %}
+
         <p>Results Found in UniProtKB for {{ peptide_info['Entry'] }} </p>
 
         <table class="table table-hover table-sm table-bordered" style=" font-size: smaller;">
@@ -354,7 +356,7 @@
                     <td>{{ peptide_info['ProteinName'] }}</td>
                     <td>{{ peptide_info['Gene'] }}</td>
                     <td>{{ peptide_info['Organism'] }}</td>
-                    <td>{{ peptide_info['Length'] }} AA</td>
+                    <td>{{ peptide_info['Length'] }} {% if peptide_info['Length'] %} AA {% endif %}</td>
 
                 </tr>
                 {% if not peptide_info %}
@@ -377,26 +379,36 @@
             </div>
         {% endif %}
         <br>
-        <a type="button" target="_blank" class="btn btn-primary btn-sm" href="https://www.uniprot.org/uniprotkb/{{peptide_info['Entry']}}/variant-viewer?loadVariants=true" >
-            View Variants in UniProt Website
-        </a>
+        
+        {% else %}
+        <table class="table table-hover table-sm table-bordered" style=" font-size: smaller;">
+          <thead>
+              <tr>
+                <th>Entry</th>
+                {% if  peptide_info['pep_name']  %}
+                <th>Match </th>
+                {% endif %}
+                <th>Entry Name</th>
+                <th>Protein Name</th>
+                <th>Gene Name</th>
+                <th>Organism</th>
+                <th>Length</th>
+              </tr>
+          </thead>
+          <tbody>
+              
+              <tr>
+                <td colspan="7" style="text-align: center;">No data available</td>
+              </tr>
 
+          </tbody>
+        </table>
+        {% endif %}
     </div>
     
     <!-- content end-->
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <footer>
-      <p>
-        <a id="ftr" href="https://facebook.com/" class="fa fa-facebook"></a>
-        <a id="ftr" href="https://whatsapp.com/" class="fa fa-whatsapp"></a>
-        <a id="ftr" href="https://instagram.com/" class="fa fa-instagram"></a>
-        <a id="ftr" href="https://twitter.com/" class="fa fa-twitter"></a>
-     
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+    
   </main>
 
   <script src="/static/SelectTag_script.js "></script>

@@ -160,9 +160,12 @@ def patient_info(patient_id):
 
     print(pr_data)
 
+    pro_list = pr_data.drop_duplicates(subset='UniProt', keep='first').reset_index(drop=True)
+    pep_list = pe_data.drop_duplicates(subset='Peptide', keep='first').reset_index(drop=True)
+
     con.close()
 
-    return pr_data.to_dict(orient='records'), pe_data.to_dict(orient='records'), s_data.to_dict(orient='records')
+    return pr_data, pe_data, s_data, pro_list, pep_list
 
 
 @app.route('/view_patient', methods = ['GET','POST'])
@@ -177,9 +180,13 @@ def view_patient():
         return render_template('doctor_base.html', patients=patients, msg=msg )
     
 
-    patient_pro_info, patient_pep_info, patient_sco_info = patient_info(patient_id)
+    patient_pro_info, patient_pep_info, patient_sco_info, pro_list, pep_list= patient_info(patient_id)
 
-    return render_template('patient_page.html', patient_id=patient_id, patient_pro_info=patient_pro_info,patient_pep_info=patient_pep_info,patient_sco_info=patient_sco_info)
+    
+
+    #print(pep_list)
+
+    return render_template('patient_page.html', patient_id=patient_id, pro_list=pro_list.to_dict(orient='records'), pep_list=pep_list.to_dict(orient='records'), patient_pro_info=patient_pro_info.to_dict(orient='records'), patient_pep_info=patient_pep_info.to_dict(orient='records'), patient_sco_info=patient_sco_info.to_dict(orient='records'))
 
 
 def get_results(patient_id, compare_by, selected_visit_months):
@@ -1166,7 +1173,6 @@ def peptide_information(response_text):
             reading_function = True
             peptide_info['Function'] = line[19:].strip()  # Start with the first line of function
 
-        # Continue reading the Function description
         elif reading_function and line.startswith("CC       "):
             peptide_info['Function'] += ' ' + line[8:].strip()  # Append continuation lines
 
@@ -1195,8 +1201,17 @@ def peptide_info():
     if request.method == "POST":
 
         patient_id = request.form['patient_id']
-        uniprot = request.form['uniprot']
-        selec_pep = request.form['pep_name']
+        
+        #uniprot = request.form['uniprot']
+        #selec_pep = request.form['pep_name']
+        u_p = request.form['uni_pep_name']
+
+        print(u_p)
+
+        u_p_list = u_p.split('|')
+
+        uniprot = u_p_list[0]
+        selec_pep = u_p_list[1]
 
         #if uniprot
 
@@ -1214,8 +1229,8 @@ def peptide_info():
 
             return render_template('peptide_info.html', peptide_info=peptide_info, patient_id=patient_id)
         except requests.HTTPError as e:
-            patient_pro_info, patient_pep_info, patient_sco_info = patient_info(patient_id)
-            return render_template('patient_page.html', error=f"HTTP Error {e.response.status_code}: {e.response.reason}", patient_id=patient_id, patient_pro_info=patient_pro_info,patient_pep_info=patient_pep_info,patient_sco_info=patient_sco_info)
+            patient_pro_info, patient_pep_info, patient_sco_info, pro_list, pep_list = patient_info(patient_id)
+            return render_template('patient_page.html', error=f"HTTP Error {e.response.status_code}: {e.response.reason}", patient_id=patient_id, pro_list=pro_list.to_dict(orient='records'), pep_list=pep_list.to_dict(orient='records'), patient_pro_info=patient_pro_info.to_dict(orient='records'), patient_pep_info=patient_pep_info.to_dict(orient='records'), patient_sco_info=patient_sco_info.to_dict(orient='records'))
     elif request.method == "GET":
         patient_id = request.args.get('patient_id')
         uniprot = request.args.get('uniprot')
@@ -1232,8 +1247,9 @@ def peptide_info():
 
             return render_template('peptide_info.html', peptide_info=peptide_info, patient_id=patient_id)
         except requests.HTTPError as e:
-            patient_pro_info, patient_pep_info, patient_sco_info = patient_info(patient_id)
-            return render_template('patient_page.html', error=f"HTTP Error {e.response.status_code}: {e.response.reason}", patient_id=patient_id, patient_pro_info=patient_pro_info,patient_pep_info=patient_pep_info,patient_sco_info=patient_sco_info)
+
+            patient_pro_info, patient_pep_info, patient_sco_info, pro_list, pep_list= patient_info(patient_id)
+            return render_template('patient_page.html', error=f"HTTP Error {e.response.status_code}: {e.response.reason}", patient_id=patient_id, pro_list=pro_list.to_dict(orient='records'), pep_list=pep_list.to_dict(orient='records'), patient_pro_info=patient_pro_info.to_dict(orient='records'), patient_pep_info=patient_pep_info.to_dict(orient='records'), patient_sco_info=patient_sco_info.to_dict(orient='records'))
 
 
     patients = get_all_patients().to_dict(orient='records')
@@ -1295,7 +1311,7 @@ def protein_information(protein):
     return protein_info
 
 
-@app.route('/protein_info')
+@app.route('/protein_info', methods = ['POST','GET'])
 def protein_info():
     if request.method == "POST":
 
@@ -1313,8 +1329,8 @@ def protein_info():
 
             return render_template('protein_info.html', protein_info=protein_info, peptide_info=peptide_info, patient_id=patient_id)
         except requests.HTTPError as e:
-            patient_pro_info, patient_pep_info, patient_sco_info = patient_info(patient_id)
-            return render_template('patient_page.html', error=f"HTTP Error {e.response.status_code}: {e.response.reason}", patient_id=patient_id, patient_pro_info=patient_pro_info,patient_pep_info=patient_pep_info,patient_sco_info=patient_sco_info)
+            patient_pro_info, patient_pep_info, patient_sco_info, pro_list, pep_list= patient_info(patient_id)
+            return render_template('patient_page.html', error=f"HTTP Error {e.response.status_code}: {e.response.reason}", patient_id=patient_id, pro_list=pro_list.to_dict(orient='records'), pep_list=pep_list.to_dict(orient='records'), patient_pro_info=patient_pro_info.to_dict(orient='records'), patient_pep_info=patient_pep_info.to_dict(orient='records'), patient_sco_info=patient_sco_info.to_dict(orient='records'))
     
     elif request.method == "GET":
         patient_id = request.args.get('patient_id')
@@ -1332,8 +1348,9 @@ def protein_info():
 
             return render_template('protein_info.html', protein_info=protein_info, peptide_info=peptide_info, patient_id=patient_id)
         except requests.HTTPError as e:
-            patient_pro_info, patient_pep_info, patient_sco_info = patient_info(patient_id)
-            return render_template('patient_page.html', error=f"HTTP Error {e.response.status_code}: {e.response.reason}", patient_id=patient_id, patient_pro_info=patient_pro_info,patient_pep_info=patient_pep_info,patient_sco_info=patient_sco_info)
+            
+            patient_pro_info, patient_pep_info, patient_sco_info, pro_list, pep_list= patient_info(patient_id)
+            return render_template('patient_page.html', error=f"HTTP Error {e.response.status_code}: {e.response.reason}", patient_id=patient_id, pro_list=pro_list.to_dict(orient='records'), pep_list=pep_list.to_dict(orient='records'), patient_pro_info=patient_pro_info.to_dict(orient='records'), patient_pep_info=patient_pep_info.to_dict(orient='records'), patient_sco_info=patient_sco_info.to_dict(orient='records'))
 
     patients = get_all_patients().to_dict(orient='records')
     #print(2)
