@@ -318,10 +318,11 @@
           </button>
       </form>
       <form action="{{ url_for('compare_two') }}" method="POST" style="display: inline-block;">
-          <button type="submit" name="patient_id" value="{{ patient_id }}" class="btn btn-secondary btn-sm">
+          <button type="submit" name="patient_id" value="{{ patient_id }}" class="btn btn-info btn-sm">
               Compare Between Patients
           </button>
       </form>
+      <button class="btn btn-success btn-sm" onclick="printPatientInfo()">Print Patient Info</button>
 
       <br><br>
       {% if error %}
@@ -337,7 +338,7 @@
             <input type="hidden" name="patient_id" value="{{patient_id}}"><!-- </a> </button>-->
             <div class="input-group mb-3">
                 <input type="text" name="uniprot" class="form-control" placeholder="Search for UniProt ID" aria-label="Search for UniProt" aria-describedby="button-addon1" required>
-                <input class="btn btn-outline-secondary" type="submit" id="button-addon1" value="Search">
+                <input class="btn btn-outline-primary" type="submit" id="button-addon1" value="Search">
             </div>
 
             <br>
@@ -375,10 +376,12 @@
                             <option value="{{ info['UniProt'] }}">{{ info['UniProt'] }}</option>
                         {% endfor %}
                     </select>
-    
+                    
                     <br>
-                    <input type="hidden" name="patient_id" value="{{patient_id}}">
                     <input type="submit" class="btn btn-primary btn-sm" value="Select">
+                    
+                    <input type="hidden" name="patient_id" value="{{patient_id}}">
+                    
                 </form>
             </div>  
     
@@ -450,8 +453,9 @@
     
                     <br>
 
-                    <input type="hidden" name="patient_id" value="{{patient_id}}">
                     <input type="submit" class="btn btn-primary btn-sm" value="Select">
+                    <input type="hidden" name="patient_id" value="{{patient_id}}">
+                    
                 </form>
             </div> 
     
@@ -498,9 +502,19 @@
         <div id="score_div" style="display: none;">
     
             <br>
-            <!-- <h6 class="mt-4">Enter four scores to predict proteins</h6>
-            <br>
-            <form class="row g-3" >
+            <div class="form-group">
+              <form method="GET" action="{{ url_for('predict_next_visit') }}">
+                <h6 class="mt-4" style="display:inline-block">Predict Next Visit Month Score</h6>
+                &nbsp;
+                <input type="submit" class="btn btn-primary btn-sm" value="Predict">
+                <input type="hidden" name="patient_id" value="{{patient_id}}">
+
+                    
+                </form>
+            </div> 
+
+            
+            <!-- <form class="row g-3" >
               
               <br>
               <div class="col-md-1">
@@ -623,7 +637,7 @@
     new SelectTag('uniprot_pr', { // id
     rounded: false,    // default true
     shadow: false,      // default false
-    placeholder: 'Search',  // default Search...
+    placeholder: 'Search for a Protein',  // default Search...
     tagColor: {
         textColor: '#000',
         borderColor: '#dee2e6',
@@ -640,7 +654,7 @@
   new SelectTag('uniprot_pe', { // id
   rounded: false,    // default true
   shadow: false,      // default false
-  placeholder: 'Search',  // default Search...
+  placeholder: 'Search for a Peptide or UniProt',  // default Search...
   tagColor: {
       textColor: '#000',
       borderColor: '#dee2e6',
@@ -653,6 +667,131 @@
 
 </script>
 
+<script>
+  function printPatientInfo() {
+      // Create a new window for printing
+      const printWindow = window.open('', '_blank');
+  
+      // HTML content for the PDF
+      const content = `
+          <html>
+          <head>
+              <title>PDPROGNOSIS - Patient Info</title>
+              <style>
+                  body {
+                      font-family: Arial, sans-serif;
+                      margin: 20px;
+                  }
+                  h1, h2, h3 {
+                      text-align: center;
+                  }
+                  table {
+                      width: 100%;
+                      border-collapse: collapse;
+                      margin-bottom: 20px;
+                  }
+                  table, th, td {
+                      border: 1px solid #ccc;
+                  }
+                  th, td {
+                      padding: 8px;
+                      text-align: left;
+                  }
+                  th {
+                      background-color: #f2f2f2;
+                  }
+                  .logo {
+                      text-align: center;
+                      margin-bottom: 20px;
+                  }
+                  .logo img {
+                      max-width: 150px;
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="logo">
+                  <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo">
+              </div>
+              <h1>PDPROGNOSIS</h1>
+              <h2>Patient ID: {{ patient_id }}</h2>
+  
+              <h3>Scores</h3>
+              <table>
+                  <thead>
+                      <tr>
+                          <th>Visit Months</th>
+                          <th>UPDRS 1 Score</th>
+                          <th>UPDRS 2 Score</th>
+                          <th>UPDRS 3 Score</th>
+                          <th>UPDRS 4 Score</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for info in patient_sco_info %}
+                      <tr>
+                          <td>{{ info['visit_month'] }}</td>
+                          <td>{{ info['updrs_1'] }}</td>
+                          <td>{{ info['updrs_2'] }}</td>
+                          <td>{{ info['updrs_3'] }}</td>
+                          <td>{{ info['updrs_4'] }}</td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+  
+              <h3>Proteins</h3>
+              <table>
+                  <thead>
+                      <tr>
+                          <th>Visit Months</th>
+                          <th>UniProt ID</th>
+                          <th>NPX</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for info in patient_pro_info %}
+                      <tr>
+                          <td>{{ info['visit_month'] }}</td>
+                          <td>{{ info['UniProt'] }}</td>
+                          <td>{{ info['NPX'] }}</td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+  
+              <h3>Peptides</h3>
+              <table>
+                  <thead>
+                      <tr>
+                          <th>Visit Months</th>
+                          <th>UniProt ID</th>
+                          <th>Peptide</th>
+                          <th>Peptide Abundance</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for info in patient_pep_info %}
+                      <tr>
+                          <td>{{ info['visit_month'] }}</td>
+                          <td>{{ info['UniProt'] }}</td>
+                          <td>{{ info['Peptide'] }}</td>
+                          <td>{{ info['PeptideAbundance'] }}</td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+          </body>
+          </html>
+      `;
+  
+      // Write content to the new window and print
+      printWindow.document.write(content);
+      printWindow.document.close();
+      printWindow.print();
+  }
+  </script>
+  
 
 
 </body>

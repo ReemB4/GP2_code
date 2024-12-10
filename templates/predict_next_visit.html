@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>PDPROGNOSIS</title>
+  <link rel="icon" href="{{ url_for('static', filename='images/logo.jpg' )}}" type="image/x-icon">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='SingleSelect_style.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='MultiSelect_style.css')}}">
+
+
+
+
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+
+
+
+    /*---------------------------------------
+       Social section
+    -----------------------------------------*/
+    footer {
+      padding: 0px 0px 0px 0px;
+      background-color: black;
+      margin: 0px;
+    }
+
+
+    #ftr {
+
+      padding: 20px;
+    }
+
+    .fa {
+
+      font-size: 23px;
+      width: 60px;
+      text-align: center;
+      text-decoration: none;
+      margin: 5px 2px;
+      border-radius: 50%;
+    }
+
+    .fa:hover {
+      opacity: 0.5;
+      text-decoration: none;
+    }
+
+    .fa-facebook {
+      background: #3B5998;
+      color: white;
+      margin-top: 30px;
+    }
+
+    .fa-whatsapp {
+      background: #25d366;
+      color: white;
+    }
+
+    .fa-twitter {
+      background: #55ACEE;
+      color: white;
+    }
+
+    .fa-instagram {
+      background: #125688;
+      color: white;
+    }
+
+    p {
+      text-align: center;
+
+    }
+
+
+
+
+
+    body {
+
+      padding-left: 240px;
+    }
+    main {
+      position: relative;
+      height: 100vh;
+    }
+
+    .menu {
+      background: #5bc995;
+      height: 100vh;
+      width: 240px;
+      position: fixed;
+      top: 0px;
+      left: 0;
+      z-index: 5;
+      outline: none;
+    }
+    .menu .avatar {
+      background: rgba(0, 0, 0, 0.1);
+      padding: 2em 0.5em;
+      text-align: center;
+    }
+    .menu .avatar img {
+      width: 100px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid #ffea92;
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
+    }
+    .menu .avatar h2 {
+      font-weight: normal;
+      margin-bottom: 0;
+    }
+    .menu ul {
+      list-style: none;
+      padding: 0.5em 0;
+      margin: 0;
+    }
+    .menu ul li {
+      padding: 0.5em 1em 0.5em 3em;
+      font-size: 0.95em;
+      font-weight: regular;
+      background-repeat: no-repeat;
+      background-position: left 15px center;
+      background-size: auto 20px;
+      transition: all 0.15s linear;
+      cursor: pointer;
+    }
+    .menu ul li.icon-dashboard {
+      background-image: url("http://www.entypo.com/images//gauge.svg");
+    }
+    .menu ul li.icon-customers {
+      background-image: url("http://www.entypo.com/images//briefcase.svg");
+    }
+    .menu ul li.icon-users {
+      background-image: url("http://www.entypo.com/images//users.svg");
+    }
+    .menu ul li.icon-calendar {
+      background-image: url("http://www.entypo.com/images//calendar.svg");
+    }
+
+    .menu ul li:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+    .menu ul li:focus {
+      outline: none;
+    }
+    @media screen and (max-width: 900px) and (min-width: 400px) {
+      body {
+        padding-left: 90px;
+      }
+      .menu {
+        width: 90px;
+      }
+      .menu .avatar {
+        padding: 0.5em;
+        position: relative;
+      }
+      .menu .avatar img {
+        width: 60px;
+      }
+      .menu .avatar h2 {
+        opacity: 0;
+        position: absolute;
+        top: 50%;
+        left: 100px;
+        margin: 0;
+        min-width: 200px;
+        border-radius: 4px;
+        background: rgba(0, 0, 0, 0.4);
+        transform: translate3d(-20px, -50%, 0);
+        transition: all 0.15s ease-in-out;
+      }
+      .menu .avatar:hover h2 {
+        opacity: 1;
+        transform: translate3d(0px, -50%, 0);
+      }
+      .menu ul li {
+        height: 60px;
+        background-position: center center;
+        background-size: 30px auto;
+        position: relative;
+      }
+      .menu ul li span {
+        opacity: 0;
+        position: absolute;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 0.2em 0.5em;
+        border-radius: 4px;
+        top: 50%;
+        left: 80px;
+        transform: translate3d(-15px, -50%, 0);
+        transition: all 0.15s ease-in-out;
+      }
+      .menu ul li span:before {
+        content: '';
+        width: 0;
+        height: 0;
+        position: absolute;
+        top: 50%;
+        left: -5px;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        border-right: 5px solid rgba(0, 0, 0, 0.5);
+        transform: translateY(-50%);
+      }
+      .menu ul li:hover span {
+        opacity: 1;
+        transform: translate3d(0px, -50%, 0);
+      }
+    }
+    @media screen and (max-width: 400px) {
+      body {
+        padding-left: 0;
+      }
+      .menu {
+        width: 230px;
+        box-shadow: 0 0 0 100em rgba(0, 0, 0, 0);
+        transform: translate3d(-230px, 0, 0);
+        transition: all 0.3s ease-in-out;
+      }
+      .menu .smartphone-menu-trigger {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        left: 100%;
+        background: #5bc995;
+      }
+      .menu .smartphone-menu-trigger:before,
+      .menu .smartphone-menu-trigger:after {
+        content: '';
+        width: 50%;
+        height: 2px;
+        background: #fff;
+        border-radius: 10px;
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0);
+      }
+      .menu .smartphone-menu-trigger:after {
+        top: 55%;
+        transform: translate3d(-50%, -50%, 0);
+      }
+      .menu ul li {
+        padding: 1em 1em 1em 3em;
+        font-size: 1.2em;
+      }
+      .menu:focus {
+        transform: translate3d(0, 0, 0);
+        box-shadow: 0 0 0 100em rgba(0, 0, 0, 0.6);
+      }
+      .menu:focus .smartphone-menu-trigger {
+        pointer-events: none;
+      }
+    }
+
+
+
+  </style>
+</head>
+
+<body>
+  <!-- partial:index.partial.html -->
+  <nav class="menu" tabindex="0">
+    <div class="smartphone-menu-trigger"></div>
+    <header class="avatar">
+        <h4>PDPROGNOSIS</h4>
+        <img src="{{ url_for('static', filename='images/logo.jpg' )}}" alt="Profile Pic" />
+        <br><br>
+        <h6>Doctor</h6>
+        <h5>Maha</h5>
+    </header>
+    <ul>
+      <li tabindex="0" class="icon-users"> <a style="color:white; text-decoration:none;" href="{{ url_for('home') }}"><span>Patients</span></a></li>
+    </ul>                                                                                       
+  </nav>
+  <main>
+
+    <br><br>
+    <!-- content start-->
+
+        <!-- Patients Table -->
+    <div class="container">
+        <form action="{{ url_for('view_patient') }}" method="POST" style="display: inline-block;">
+            <button type="submit" name="view_patient" value="{{ patient_id }}" class="btn btn-secondary btn-sm" >
+                &larr; Back
+            </button>
+        </form>
+
+        <h4 class="mt-4">Patient {{patient_id}}</h4>
+
+
+      <br>
+
+      <h6 class="mt-4">The prediction of the next visit month Scores using XGBRegressor model</h6>
+
+      <table class="table table-hover table-sm table-bordered" style=" font-size: smaller;">
+        <thead>
+            <tr>
+                <th>Score</th>
+                <th>Prediction</th>
+                <th>Lower bound (95% Confidence Intervals)</th>
+                <th>Upper bound (95% Confidence Intervals)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in ci_df %}
+            <tr>
+
+                <td><b>{{ s['UPDRS_Score'] }}</b></td>
+                <td>{{ s['Prediction'] }}</td>
+                <td>{{ s['Lower bound (95% Confidence Intervals)'] }}</td>
+                <td>{{ s['Upper bound (95% Confidence Intervals)'] }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">Error, No data available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+      <br>
+
+      <h6 class="mt-4">The evaluatation of the model for each UPDRS scores</h6>
+
+      <table class="table table-hover table-sm table-bordered" style=" font-size: smaller;">
+        <thead>
+            <tr>
+                <th>Evaluation Metrix</th>
+                <th>UPDRS 1</th>
+                <th>UPDRS 2</th>
+                <th>UPDRS 3</th>
+                <th>UPDRS 4</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+
+                <td><b>RMSE</b></td>
+                <td>3.6792</td>
+                <td>3.6697</td>
+                <td>9.4674</td>
+                <td>2.0141</td>
+            </tr>
+            <tr>
+
+                <td><b>MAE</b></td>
+                <td>2.7584</td>
+                <td>2.6736</td>
+                <td>7.1175</td>
+                <td>1.1466</td>
+            </tr>
+            <tr>
+
+                <td><b>R2</b></td>
+                <td>0.4892</td>
+                <td>0.5909</td>
+                <td>0.5930</td>
+                <td>0.2676</td>
+            </tr>
+        </tbody>
+    </table>
+
+      <br><br>
+    
+
+        <ul class="nav nav-tabs">
+            <li class="nav-item" style="cursor: pointer;">
+                <a class="nav-link active" aria-current="page" id="tab_1" onclick="change_display(1)">UPDRS 1</a>
+            </li>
+            <li class="nav-item" style="cursor: pointer;">
+                <a class="nav-link" id="tab_2" onclick="change_display(2)">UPDRS 2</a>
+            </li>
+            <li class="nav-item" style="cursor: pointer;">
+                <a class="nav-link" id="tab_3" onclick="change_display(3)">UPDRS 3</a>
+            </li>
+
+            <li class="nav-item" style="cursor: pointer;">
+                <a class="nav-link" id="tab_4" onclick="change_display(4)">UPDRS 4</a>
+            </li>
+        </ul>
+
+    
+        
+        
+        <!--  -->
+        <div id="div_1" style="display: block;">
+
+            <h6 class="mt-4">The Important Proteins & Peptides for UPDRS 1</h6>
+            <br>
+
+                 
+            <select id="uniprot_pr1" name="uniprot1" class="multi-select-tag" >
+                {% for i in important_features_updrs_1 %}
+                    <option value="{{ i['Feature'] }}">{{ i['Feature'] }} | Importance: {{ i['Importance'] }}</option>
+                {% endfor %}
+            </select>
+
+
+            <br><br>
+    
+            <table class="table table-hover table-sm table-bordered" style=" font-size: smaller;">
+                <thead>
+                    <tr>
+                        <th>Proteins & Peptides</th>
+                        <th>Importance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in important_features_updrs_1 %}
+                    <tr>
+    
+                        <td>{{ i['Feature'] }}</td>
+                        <td>{{ i['Importance'] }}</td>
+
+       
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="2">No data available</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!--  -->
+        <div id="div_2" style="display: none;">
+
+        
+            <h6 class="mt-4">The Important Proteins & Peptides for UPDRS 2</h6>
+            <br>
+
+                 
+            <select id="uniprot_pr2" name="uniprot2" class="multi-select-tag" >
+                {% for i in important_features_updrs_2 %}
+                    <option value="{{ i['Feature'] }}">{{ i['Feature'] }} | Importance: {{ i['Importance'] }}</option>
+                {% endfor %}
+            </select>
+
+
+            <br><br>
+    
+            <table class="table table-hover table-sm table-bordered" style=" font-size: smaller;">
+                <thead>
+                    <tr>
+                        <th>Proteins & Peptides</th>
+                        <th>Importance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in important_features_updrs_2 %}
+                    <tr>
+    
+                        <td>{{ i['Feature'] }}</td>
+                        <td>{{ i['Importance'] }}</td>
+
+       
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="2">No data available</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!--  -->
+        <div id="div_3" style="display: none;">
+    
+            <h6 class="mt-4">The Important Proteins & Peptides for UPDRS 3</h6>
+            <br>
+
+                 
+            <select id="uniprot_pr3" name="uniprot3" class="multi-select-tag" >
+                {% for i in important_features_updrs_3 %}
+                    <option value="{{ i['Feature'] }}">{{ i['Feature'] }} | Importance: {{ i['Importance'] }}</option>
+                {% endfor %}
+            </select>
+
+
+            <br><br>
+    
+            <table class="table table-hover table-sm table-bordered" style=" font-size: smaller;">
+                <thead>
+                    <tr>
+                        <th>Proteins & Peptides</th>
+                        <th>Importance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in important_features_updrs_3 %}
+                    <tr>
+    
+                        <td>{{ i['Feature'] }}</td>
+                        <td>{{ i['Importance'] }}</td>
+
+       
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="2">No data available</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div id="div_4" style="display: none;">
+    
+            <h6 class="mt-4">The Important Proteins & Peptides for UPDRS 4</h6>
+            <br>
+
+                 
+            <select id="uniprot_pr4" name="uniprot4" class="multi-select-tag" >
+                {% for i in important_features_updrs_4 %}
+                    <option value="{{ i['Feature'] }}">{{ i['Feature'] }} | Importance: {{ i['Importance'] }}</option>
+                {% endfor %}
+            </select>
+
+
+            <br><br>
+    
+            <table class="table table-hover table-sm table-bordered" style=" font-size: smaller;">
+                <thead>
+                    <tr>
+                        <th>Proteins & Peptides</th>
+                        <th>Importance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in important_features_updrs_4 %}
+                    <tr>
+    
+                        <td>{{ i['Feature'] }}</td>
+                        <td>{{ i['Importance'] }}</td>
+
+       
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="2">No data available</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+        
+
+
+    
+    <!-- content end-->
+    <br><br><br><br><br><br><br>
+<!--     <button id="downloadPDF" class="btn btn-secondary btn-sm" href="patient_page.html" onabort="window.print()">Download Patient Info as PDF</button>
+ -->
+    
+  </main>
+
+  <script>
+    function change_display(tabIndex) {
+
+    document.getElementById("div_1").style.display = "none";
+    document.getElementById("div_2").style.display = "none";
+    document.getElementById("div_3").style.display = "none";
+    document.getElementById("div_4").style.display = "none";
+
+
+    document.getElementById("tab_1").classList.remove("active");
+    document.getElementById("tab_2").classList.remove("active");
+    document.getElementById("tab_3").classList.remove("active");
+    document.getElementById("tab_4").classList.remove("active");
+
+
+    switch (tabIndex) {
+        case 1:
+            document.getElementById("div_1").style.display = "block";
+            document.getElementById("tab_1").classList.add("active");
+            break;
+        case 2:
+            document.getElementById("div_2").style.display = "block";
+            document.getElementById("tab_2").classList.add("active");
+            break;
+        case 3:
+            document.getElementById("div_3").style.display = "block";
+            document.getElementById("tab_3").classList.add("active");
+            break;
+        case 4:
+            document.getElementById("div_4").style.display = "block";
+            document.getElementById("tab_4").classList.add("active");
+            break;
+        default:
+            console.warn("Invalid tab index");
+    }
+}
+
+
+  </script>
+
+  <script src="/static/SelectTag_script.js "></script>
+  <script src="/static/MultiSelect_style.js "></script>
+
+<script>
+    new SelectTag('uniprot_pr1', { // id
+    rounded: false,    // default true
+    shadow: false,      // default false
+    placeholder: 'Search...',  // default Search...
+    tagColor: {
+        textColor: '#000',
+        borderColor: '#dee2e6',
+        bgColor: '#fff',
+    },
+    onChange: function(values) {
+        console.log(values)
+    }
+})
+
+</script>
+
+<script>
+  new SelectTag('uniprot_pr2', { // id
+  rounded: false,    // default true
+  shadow: false,      // default false
+  placeholder: 'Search...',  // default Search...
+  tagColor: {
+      textColor: '#000',
+      borderColor: '#dee2e6',
+      bgColor: '#fff',
+  },
+  onChange: function(values) {
+      console.log(values)
+  }
+})
+
+</script>
+<script>
+  new SelectTag('uniprot_pr3', { // id
+  rounded: false,    // default true
+  shadow: false,      // default false
+  placeholder: 'Search...',  // default Search...
+  tagColor: {
+      textColor: '#000',
+      borderColor: '#dee2e6',
+      bgColor: '#fff',
+  },
+  onChange: function(values) {
+      console.log(values)
+  }
+})
+
+</script>
+<script>
+  new SelectTag('uniprot_pr4', { // id
+  rounded: false,    // default true
+  shadow: false,      // default false
+  placeholder: 'Search...',  // default Search...
+  tagColor: {
+      textColor: '#000',
+      borderColor: '#dee2e6',
+      bgColor: '#fff',
+  },
+  onChange: function(values) {
+      console.log(values)
+  }
+})
+
+</script>
+
+<script>
+  new SelectTag('uniprot_pe', { // id
+  rounded: false,    // default true
+  shadow: false,      // default false
+  placeholder: 'Search...',  // default Search...
+  tagColor: {
+      textColor: '#000',
+      borderColor: '#dee2e6',
+      bgColor: '#fff',
+  },
+  onChange: function(values) {
+      console.log(values)
+  }
+})
+
+</script>
+
+
+
+</body>
+
+
+</html>

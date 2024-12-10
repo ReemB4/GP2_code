@@ -316,8 +316,15 @@
         <!-- Patients Table -->
     <div class="container">
         <h4 class="mt-4">Patients Data</h4>
-
         <br>
+
+        <form action="{{ url_for('clustering_patients') }}" method="POST" style="display: inline-block;">
+          <button type="submit" class="btn btn-warning">
+            Cluster Patients by Proteins and Peptides
+          </button>
+      </form>
+
+        <br><br>
         <div class="form-group">
           <p>Search for Patient</p>
              
@@ -371,7 +378,7 @@
                             </button>
                         </form>
                         <form action="{{ url_for('compare_two') }}" method="POST" style="display: inline-block;">
-                            <button type="submit" name="patient_id" value="{{ patient['Patient ID'] }}" class="btn btn-secondary btn-sm">
+                            <button type="submit" name="patient_id" value="{{ patient['Patient ID'] }}" class="btn btn-info btn-sm">
                                 Compare Between Patients
                             </button>
                         </form>
