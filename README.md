@@ -91,11 +91,11 @@ cd GP2_code
 
 ---
 
-GP2 code includes
+### GP2 code Features
 
-- using uniprot api to get proteins & prptides info
-- view patient's history/visits
-- compare patient per visit
-- compare patients 
-- clustring
-- regression
+The GP2 Code application provides tools for analyzing Parkinson’s disease progression, including:
+- Protein and Peptide Insights: Fetches detailed data from the UniProt API.
+- Patient History: Tracks patient visits and progression over time.
+- Comparisons: Compares data across patient visits and between patients.
+- Clustering: Groups patients into meaningful subpopulations using clustering techniques.
+- Regression Analysis: Predicts UPDRS scores with advanced machine learning models like XGBoost.
