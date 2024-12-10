@@ -72,6 +72,7 @@ cd GP2_code
    ```
 2. If a specific script (e.g., `create_database.py`,` app.py`) needs to be executed:
    ```bash
+   python create_database.py
    python app.py
    ```
 
@@ -88,7 +89,7 @@ cd GP2_code
 
 
 
-
+---
 
 GP2 code includes
 
