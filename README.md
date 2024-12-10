@@ -101,5 +101,7 @@ The GP2 Code application provides tools for analyzing Parkinson’s disease pr
 - Regression Analysis: Predicts UPDRS scores with advanced machine learning models like XGBoost.
 
 ---
-The source code Sara: [PDPrognosis on GitHub](https://github.com/sarahksu7/2024-GP-08)
-The source code Reem: [PDPrognosis on GitHub](https://github.com/ReemB4/GP2_code)
+The source code: [PDPrognosis on GitHub](https://github.com/sarahksu7/2024-GP-08)
+
+
+The source code: [PDPrognosis on GitHub](https://github.com/ReemB4/GP2_code)
