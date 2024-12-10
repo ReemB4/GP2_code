@@ -93,7 +93,7 @@ cd GP2_code
 
 GP2 code includes
 
-- using uniprot api get prptides info
+- using uniprot api to get proteins & prptides info
 - view patient's history/visits
 - compare patient per visit
 - compare patients 
