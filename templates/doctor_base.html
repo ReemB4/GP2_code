@@ -104,7 +104,7 @@
     }
 
     .menu {
-      background: #5bc995;
+      background: #4a4e3a;
       height: 100vh;
       width: 240px;
       position: fixed;
@@ -242,7 +242,7 @@
         height: 40px;
         position: absolute;
         left: 100%;
-        background: #5bc995;
+        background: #4a4e3a;
       }
       .menu .smartphone-menu-trigger:before,
       .menu .smartphone-menu-trigger:after {
@@ -282,15 +282,16 @@
   <!-- partial:index.partial.html -->
   <nav class="menu" tabindex="0">
     <div class="smartphone-menu-trigger"></div>
-    <header class="avatar">
+    <header class="avatar" style="color:white; text-decoration:none;">
         <h4>PDPROGNOSIS</h4>
-        <img src="{{ url_for('static', filename='images/logo.jpg' )}}" alt="Profile Pic" />
+        <img src="{{ url_for('static', filename='images/logo.jpg' )}}" alt="logo" />
         <br><br>
-        <h6>Doctor</h6>
-        <h5>Maha</h5>
     </header>
     <ul>
+      {% if not roleP %}
       <li tabindex="0" class="icon-users"> <a style="color:white; text-decoration:none;" href="{{ url_for('home') }}"><span>Patients</span></a></li>
+      {% endif %}
+      <li tabindex="0" class="icon-users"> <a style="color:white; text-decoration:none;" href="{{ url_for('base') }}"><span>Logout</span></a></li>
     </ul>                                                                                       
   </nav>
   <main>
@@ -319,7 +320,7 @@
         <br>
 
         <form action="{{ url_for('clustering_patients') }}" method="POST" style="display: inline-block;">
-          <button type="submit" class="btn btn-warning">
+          <button type="submit" class="btn btn-success btn-sm">
             Cluster Patients by Proteins and Peptides
           </button>
       </form>
@@ -329,7 +330,9 @@
           <p>Search for Patient</p>
              
             <form method="POST", action="{{ url_for('view_patient') }}">
+              <input type="hidden" name="roleP" value="{{0}}">
                 <select id="view_patient" name="view_patient" class="multi-select-tag" required title="Please select a patient">
+                  
                     {% for patient in patients %}
                         <option value="{{ patient['Patient ID'] }}">Patient {{ patient['Patient ID'] }}</option>
                     {% endfor %}
@@ -368,11 +371,13 @@
                     <td>{{ patient['updrs_4 Score'] }}</td>
                     <td>
                         <form action="{{ url_for('view_patient') }}" method="POST" style="display: inline-block;">
-                            <button type="submit" name="view_patient" value="{{ patient['Patient ID'] }}" class="btn btn-primary btn-sm">
+                          <input type="hidden" name="roleP" value="{{0}}">  
+                          <button type="submit" name="view_patient" value="{{ patient['Patient ID'] }}" class="btn btn-primary btn-sm">
                                 View
                             </button>
                         </form>
                         <form action="{{ url_for('compare_visits') }}" method="POST" style="display: inline-block;">
+                          <input type="hidden" name="roleP" value="{{0}}">
                             <button type="submit" name="patient_id" value="{{ patient['Patient ID'] }}" class="btn btn-info btn-sm">
                                 Compare Visits Information
                             </button>

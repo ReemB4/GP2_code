@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PDPrognosis — Log In</title>
+  <style>
+    :root {
+      --base-color: #4a4e3a;
+      --soft-blue: #6a8caf;
+      --light-gray: #f7f7f7;
+      --white: #ffffff;
+      --muted-green: #7fae7e;
+      --muted-green-hover: #689f68;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: var(--light-gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .login-box {
+      background: var(--white);
+      padding: 40px 30px;
+      width: 320px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .login-box img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      margin-bottom: 20px;
+    }
+
+    .login-box h2 {
+      margin: 0 0 20px;
+      color: var(--base-color);
+      font-size: 24px;
+    }
+
+    .login-box label {
+      display: block;
+      text-align: left;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: var(--base-color);
+    }
+
+    .login-box input[type="text"],
+    .login-box input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 12px;
+      background: var(--muted-green);
+      border: none;
+      border-radius: 4px;
+      color: var(--white);
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .login-box button:hover {
+      background: var(--muted-green-hover);
+    }
+
+    .login-box .links {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .login-box .links a {
+      color: var(--soft-blue);
+      text-decoration: none;
+    }
+
+    .login-box .links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <!-- Adjust path if your logo is in a different folder -->
+    <img src="PD.jpeg" alt="PDPrognosis Logo" />
+    <h2>Log In</h2>
+    <form action="/authenticate" method="post">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required />
+
+      <button type="submit">Log In</button>
+    </form>
+    <div class="links">
+      <p><a href="forgot-password.html">Forgot password?</a></p>
+      <p><a href="signup.html">Create an account</a></p>
+    </div>
+  </div>
+</body>
+</html>

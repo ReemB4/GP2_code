@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDPrognosis - Parkinson's Disease Prognosis Platform</title>
+  <link rel="icon" href="{{ url_for('static', filename='images/logo.jpg' )}}" type="image/x-icon">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7; /* Light gray background */
+    }
+    header {
+      background: #4a4e3a; /* Base color */
+      color: #ffffff;
+      padding: 20px 0;
+      text-align: center;
+      position: relative;
+    }
+    .header-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-container img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
+    .title-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    nav a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    nav a:hover {
+      color: #6a8caf; /* Soft blue hover color */
+    }
+    .container {
+      padding: 20px;
+      max-width: 1000px;
+      margin: 20px auto;
+      background: #ffffff; /* Crisp white for content background */
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .login-btn {
+      display: inline-block;
+      background: #7fae7e; /* Muted green for the login button */
+      color: #ffffff;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 20px;
+      transition: background 0.3s ease;
+    }
+    .login-btn:hover {
+      background: #689f68; /* Slightly darker muted green on hover */
+    }
+    footer {
+      background: #4a4e3a; /* Base color */
+      color: #ffffff;
+      text-align: center;
+      padding: 10px;
+      margin-top: 20px;
+    }
+    a {
+      color: #6a8caf; /* Soft blue for other links */
+      
+    }
+    a:hover {
+        text-decoration: none;
+        color: #87b3df;
+    }
+    .header-content .logo-container img {
+      border-radius: 50%;
+      border: 4px solid #ffea92;
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
+      width: 100px;
+      height: 107px;
+    }
+
+
+    .menu .avatar h2 {
+      font-weight: normal;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content menu">
+      <div class="logo-container avatar">
+        <!--  -->
+        <img src="{{ url_for('static', filename='images/logo.jpg' )}}" alt="PDPROGNOSIS Logo"/>
+        <div class="title-section">
+          <h2>PDPROGNOSIS</h2>
+          <p>Empowering Parkinson's Disease Diagnosis and Prognosis</p>
+        </div>
+      </div>
+      <nav>
+        <a href="{{ url_for('login') }}">Log In</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <section>
+      <h2>About the Project</h2>
+      <p>
+        PDPrognosis is an innovative platform designed to assist healthcare professionals in diagnosing 
+        and predicting the progression of Parkinson’s Disease using advanced machine learning techniques. 
+        By integrating comprehensive protein and peptide data, PDPrognosis aims to identify key biomarkers 
+        and provide actionable insights to improve patient care.
+      </p>
+    </section>
+
+    <section>
+      <h2>About Parkinson's Disease</h2>
+      <p>
+        Parkinson's Disease is a progressive neurological disorder characterized by the degeneration of 
+        dopamine-producing neurons in the brain. This loss leads to symptoms such as tremors, rigidity, 
+        slow movement, and a range of non-motor issues, significantly impacting a patient’s quality of life.
+      </p>
+      <p>
+        For more detailed and reputable information about Parkinson's Disease, please visit the 
+        <a href="https://www.ninds.nih.gov/Disorders/All-Disorders/Parkinsons-Disease-Information-Page" target="_blank">
+          National Institute of Neurological Disorders and Stroke (NINDS)
+        </a> or the 
+        <a href="https://www.mayoclinic.org/diseases-conditions/parkinsons-disease/symptoms-causes/syc-20376055" target="_blank">
+          Mayo Clinic
+        </a>.
+      </p>
+    </section>
+<br>
+    <a class="btn btn-success" href="{{ url_for('login') }}">Log In</a>
+  </div>
+
+  <footer>
+    <p>&copy; 2024 PDPrognosis Project. Learn more about the project on 
+      <a href="https://github.com/ReemB4/GP2_code" target="_blank">GitHub Repository</a>.
+    </p>
+    <p>Source: PDPrognosis Project Report (<a href="https://drive.google.com/file/d/1d6j6euk1MIlnMzK0Ij3K8UfZUeAYn-xw/view?usp=sharing" target="_blank">View Report</a>)</p>
+  </footer>
+</body>
+</html>
